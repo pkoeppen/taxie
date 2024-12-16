@@ -1,0 +1,19 @@
+[Unit]
+Description=Docker Compose Application
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=appuser
+ProtectSystem=full
+ProtectHome=yes
+NoNewPriveleges=true
+WorkingDirectory=/app
+ExecStart=/usr/local/bin/docker-compose up -d
+ExecStop=/usr/local/bin/docker-compose stop
+Environment=NODE_ENV=production
+Restart=always
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

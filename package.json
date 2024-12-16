@@ -1,0 +1,47 @@
+{
+  "name": "taxie",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 3499",
+    "build": "next build",
+    "start": "next start -p 3499",
+    "lint": "next lint",
+    "reset": "npm run reset-postgres && npm run reset-redis",
+    "reset-postgres": "tsx ./lib/postgres/reset.ts",
+    "reset-redis": "tsx ./lib/redis/reset.ts"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "dotenv": "^16.4.7",
+    "kysely": "^0.27.5",
+    "lodash": "^4.17.21",
+    "next": "15.1.0",
+    "pg": "^8.13.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.4",
+    "@eslint/eslintrc": "^3.2.0",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^20",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "colors": "^1.4.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "postcss": "^8",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5",
+    "winston": "^3.17.0"
+  }
+}
