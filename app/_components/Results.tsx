@@ -1,13 +1,19 @@
 "use client";
 
 import Slider from "./Slider";
-import { US_TaxCalculator } from "@/lib/calculators";
-import { ACSMetric, ACSMetricData, CountryCode, Metric, US_States } from "@/lib/constants/constants";
+import {
+  ACSMetric,
+  ACSMetricData,
+  CountryCode,
+  Metric,
+  US_States,
+} from "@/lib/constants/US/military";
+import { US_TaxCalculator } from "@/lib/taxCalculator";
 import { QueryData } from "@/lib/types";
-import { formatMetric } from "@/lib/utilClient";
 import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
+import { formatMetric } from "@/lib/utilClient";
 
 export default function Results({
   queryData,
@@ -29,26 +35,28 @@ export default function Results({
     apy: 0.04,
   };
 
-  const resultsUpdated = results.slice(0, 10).map((result: Record<string, any>) => {
-    if (result[ACSMetric.MedianIncome]) {
-      const calculator = new US_TaxCalculator({
-        country: CountryCode.US,
-        salary: parseInt(result[ACSMetric.MedianIncome]) * multiplier,
-        years: savingsSettings.years,
-        apy: savingsSettings.apy,
-        expenses: [
-          { name: "rent", amount: 1400 },
-          { name: "food", amount: 500 },
-          { name: "car", amount: 250 },
-          { name: "fun", amount: 150 },
-        ],
-        state: US_States[result.state_id as keyof typeof US_States],
-      });
-      const { finalBalance } = calculator.run();
-      result.finalBalance = finalBalance;
-    }
-    return result;
-  });
+  const resultsUpdated = results
+    .slice(0, 10)
+    .map((result: Record<string, any>) => {
+      if (result[ACSMetric.MedianIncome]) {
+        const calculator = new US_TaxCalculator({
+          country: CountryCode.US,
+          salary: parseInt(result[ACSMetric.MedianIncome]) * multiplier,
+          years: savingsSettings.years,
+          apy: savingsSettings.apy,
+          expenses: [
+            { name: "rent", amount: 1400 },
+            { name: "food", amount: 500 },
+            { name: "car", amount: 250 },
+            { name: "fun", amount: 150 },
+          ],
+          state: US_States[result.state_id as keyof typeof US_States],
+        });
+        const { finalBalance } = calculator.run();
+        result.finalBalance = finalBalance;
+      }
+      return result;
+    });
 
   return (
     <div className="grow py-3">
@@ -86,7 +94,10 @@ export default function Results({
                     <span className="grow border-b"></span>
                     {result[ACSMetric.MedianIncome] ? (
                       <span className="font-medium">
-                        {formatMetric(result[ACSMetric.MedianIncome], Metric.Monetary)}
+                        {formatMetric(
+                          result[ACSMetric.MedianIncome],
+                          Metric.Monetary,
+                        )}
                       </span>
                     ) : (
                       <span className="text-stone-400">No Data</span>
@@ -96,7 +107,10 @@ export default function Results({
                     <span>Total population:</span>
                     <span className="grow border-b"></span>
                     <span className="font-medium">
-                      {formatMetric(result[ACSMetric.TotalPopulation], Metric.Integer)}
+                      {formatMetric(
+                        result[ACSMetric.TotalPopulation],
+                        Metric.Integer,
+                      )}
                     </span>
                   </div>
                 </div>
@@ -109,7 +123,10 @@ export default function Results({
                       <span>{ACSMetricData[c.id].label}:</span>
                       <span className="grow border-b"></span>
                       <span className="font-medium">
-                        {formatMetric(result[c.id], ACSMetricData[c.id].display)}
+                        {formatMetric(
+                          result[c.id],
+                          ACSMetricData[c.id].display,
+                        )}
                       </span>
                     </div>
                   ))}
@@ -160,7 +177,10 @@ export default function Results({
                         })}
                       >
                         {result.finalBalance < 0 && "-"}
-                        {formatMetric(Math.abs(result.finalBalance), Metric.Monetary)}
+                        {formatMetric(
+                          Math.abs(result.finalBalance),
+                          Metric.Monetary,
+                        )}
                       </span>
                     ) : (
                       <span className="text-stone-400">No Data</span>
@@ -168,7 +188,8 @@ export default function Results({
                   </div>
                   <div className="text-xs">
                     <span>
-                      {savingsSettings.years} years at {(savingsSettings.apy * 100).toFixed(1)}% APY
+                      {savingsSettings.years} years at{" "}
+                      {(savingsSettings.apy * 100).toFixed(1)}% APY
                     </span>
                   </div>
                 </div>
